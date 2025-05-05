@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Sharee{% endblock %}
+
+{% block content %}
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="banner-title">Checkout</h1>
+                <nav class="breadcrumb">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <span class="separator">/</span>
+                    <a href="{{ url_for('cart') }}">Cart</a>
+                    <span class="separator">/</span>
+                    <span class="current">Checkout</span>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Content -->
+    <section class="checkout-section section-padding">
+        <div class="container">
+            <form action="{{ url_for('place_order') }}" method="post" class="checkout-form">
+                <div class="checkout-grid">
+                    <!-- Customer Information -->
+                    <div class="checkout-main">
+                        <div class="checkout-block">
+                            <h3 class="block-title">Billing Details</h3>
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="first-name">First Name <span class="required">*</span></label>
+                                    <input type="text" id="first-name" name="first_name" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="last-name">Last Name <span class="required">*</span></label>
+                                    <input type="text" id="last-name" name="last_name" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Company Name (Optional)</label>
+                                <input type="text" id="company" name="company">
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country / Region <span class="required">*</span></label>
+                                <select id="country" name="country" required>
+                                    <option value="IN" selected>India</option>
+                                    <option value="US">United States</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="AU">Australia</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address-1">Street Address <span class="required">*</span></label>
+                                <input type="text" id="address-1" name="address_1" placeholder="House number and street name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="address-2" name="address_2" placeholder="Apartment, suite, unit, etc. (optional)">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">Town / City <span class="required">*</span></label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="state">State <span class="required">*</span></label>
+                                    <select id="state" name="state" required>
+                                        <option value="">Select State</option>
+                                        <option value="AP">Andhra Pradesh</option>
+                                        <option value="AR">Arunachal Pradesh</option>
+                                        <option value="AS">Assam</option>
+                                        <option value="BR">Bihar</option>
+                                        <option value="CT">Chhattisgarh</option>
+                                        <option value="GA">Goa</option>
+                                        <option value="GJ">Gujarat</option>
+                                        <option value="HR">Haryana</option>
+                                        <option value="HP">Himachal Pradesh</option>
+                                        <option value="JH">Jharkhand</option>
+                                        <option value="KA">Karnataka</option>
+                                        <option value="KL">Kerala</option>
+                                        <option value="MP">Madhya Pradesh</option>
+                                        <option value="MH">Maharashtra</option>
+                                        <option value="MN">Manipur</option>
+                                        <option value="ML">Meghalaya</option>
+                                        <option value="MZ">Mizoram</option>
+                                        <option value="NL">Nagaland</option>
+                                        <option value="OR">Odisha</option>
+                                        <option value="PB">Punjab</option>
+                                        <option value="RJ">Rajasthan</option>
+                                        <option value="SK">Sikkim</option>
+                                        <option value="TN">Tamil Nadu</option>
+                                        <option value="TG">Telangana</option>
+                                        <option value="TR">Tripura</option>
+                                        <option value="UP">Uttar Pradesh</option>
+                                        <option value="UK">Uttarakhand</option>
+                                        <option value="WB">West Bengal</option>
+                                    </select>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="pincode">Postcode / ZIP <span class="required">*</span></label>
+                                    <input type="text" id="pincode" name="pincode" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="phone">Phone <span class="required">*</span></label>
+                                    <input type="tel" id="phone" name="phone" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="email">Email Address <span class="required">*</span></label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout-block">
+                            <div class="form-check">
+                                <input type="checkbox" id="different-shipping" name="different_shipping">
+                                <label for="different-shipping">Ship to a different address?</label>
+                            </div>
+                        </div>
+
+                        <div class="checkout-block shipping-address-block" style="display: none;">
+                            <h3 class="block-title">Shipping Details</h3>
+                            <!-- Shipping address fields mirror billing fields -->
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="shipping-first-name">First Name</label>
+                                    <input type="text" id="shipping-first-name" name="shipping_first_name">
+                                </div>
+                                <div class="form-group half">
+                                    <label for="shipping-last-name">Last Name</label>
+                                    <input type="text" id="shipping-last-name" name="shipping_last_name">
+                                </div>
+                            </div>
+                            <!-- More shipping fields would go here -->
+                        </div>
+
+                        <div class="checkout-block">
+                            <h3 class="block-title">Additional Information</h3>
+                            <div class="form-group">
+                                <label for="order-notes">Order Notes (Optional)</label>
+                                <textarea id="order-notes" name="order_notes" placeholder="Notes about your order, e.g. special delivery instructions"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="checkout-sidebar">
+                        <div class="order-summary">
+                            <h3>Your Order</h3>
+                            <table class="order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart_products %}
+                                    <tr>
+                                        <td>{{ item.product.name }} <strong>× {{ item.quantity }}</strong></td>
+                                        <td>₹{{ item.total }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr class="subtotal">
+                                        <th>Subtotal</th>
+                                        <td>₹{{ total }}</td>
+                                    </tr>
+                                    <tr class="shipping">
+                                        <th>Shipping</th>
+                                        <td>
+                                            {% if total < 1999 %}
+                                            ₹149
+                                            {% else %}
+                                            <span class="free-shipping">Free!</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr class="tax">
+                                        <th>GST (18%)</th>
+                                        <td>₹{{ (total * 0.18)|int }}</td>
+                                    </tr>
+                                    <tr class="total">
+                                        <th>Total</th>
+                                        <td>
+                                            {% if total < 1999 %}
+                                            ₹{{ total + (total * 0.18)|int + 149 }}
+                                            {% else %}
+                                            ₹{{ total + (total * 0.18)|int }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="payment-methods">
+                            <h3>Payment Method</h3>
+                            <div class="payment-options">
+                                <div class="payment-option">
+                                    <input type="radio" id="payment-cod" name="payment_method" value="cod" checked>
+                                    <label for="payment-cod">Cash on Delivery</label>
+                                    <div class="payment-description">
+                                        Pay with cash upon delivery.
+                                    </div>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="payment-card" name="payment_method" value="card">
+                                    <label for="payment-card">Credit / Debit Card</label>
+                                    <div class="payment-icons">
+                                        <i class="fab fa-cc-visa"></i>
+                                        <i class="fab fa-cc-mastercard"></i>
+                                        <i class="fab fa-cc-amex"></i>
+                                    </div>
+                                    <div class="payment-description payment-card-fields">
+                                        <div class="form-group">
+                                            <label for="card-number">Card Number</label>
+                                            <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group half">
+                                                <label for="card-expiry">Expiry (MM/YY)</label>
+                                                <input type="text" id="card-expiry" placeholder="MM/YY">
+                                            </div>
+                                            <div class="form-group half">
+                                                <label for="card-cvc">CVC</label>
+                                                <input type="text" id="card-cvc" placeholder="CVC">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="payment-upi" name="payment_method" value="upi">
+                                    <label for="payment-upi">UPI</label>
+                                    <div class="payment-icons">
+                                        <img src="{{ url_for('static', filename='images/payment/upi.png') }}" alt="UPI" class="upi-icon">
+                                    </div>
+                                    <div class="payment-description payment-upi-fields">
+                                        <div class="form-group">
+                                            <label for="upi-id">UPI ID</label>
+                                            <input type="text" id="upi-id" placeholder="yourname@upi">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout-actions">
+                            <p class="terms-notice">By placing this order, you agree to our <a href="#">terms and conditions</a> and <a href="#">privacy policy</a>.</p>
+                            <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle shipping address
+        const shippingToggle = document.getElementById('different-shipping');
+        const shippingBlock = document.querySelector('.shipping-address-block');
+        
+        if (shippingToggle && shippingBlock) {
+            shippingToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    shippingBlock.style.display = 'block';
+                } else {
+                    shippingBlock.style.display = 'none';
+                }
+            });
+        }
+        
+        // Toggle payment method details
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const cardFields = document.querySelector('.payment-card-fields');
+        const upiFields = document.querySelector('.payment-upi-fields');
+        
+        if (paymentMethods.length && cardFields && upiFields) {
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        cardFields.style.display = 'block';
+                        upiFields.style.display = 'none';
+                    } else if (this.value === 'upi') {
+                        cardFields.style.display = 'none';
+                        upiFields.style.display = 'block';
+                    } else {
+                        cardFields.style.display = 'none';
+                        upiFields.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Initialize display based on default selection
+            const defaultMethod = document.querySelector('input[name="payment_method"]:checked');
+            if (defaultMethod) {
+                if (defaultMethod.value === 'card') {
+                    cardFields.style.display = 'block';
+                    upiFields.style.display = 'none';
+                } else if (defaultMethod.value === 'upi') {
+                    cardFields.style.display = 'none';
+                    upiFields.style.display = 'block';
+                } else {
+                    cardFields.style.display = 'none';
+                    upiFields.style.display = 'none';
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Sharee{% endblock %}
+
+{% block styles %}
+<style>
+    .zoom-gallery img {
+        cursor: zoom-in;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Product Breadcrumb -->
+    <section class="breadcrumb-section">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="{{ url_for('home') }}">Home</a>
+                <span class="separator">/</span>
+                <a href="{{ url_for('shop') }}">Shop</a>
+                <span class="separator">/</span>
+                <a href="{{ url_for('shop', category=product.category) }}">{{ product.category|title }} Sarees</a>
+                <span class="separator">/</span>
+                <span class="current">{{ product.name }}</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Product Detail -->
+    <section class="product-detail section-padding">
+        <div class="container">
+            <div class="product-detail-grid">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image zoom-gallery">
+                        <img src="{{ url_for('static', filename=product.image.replace('static/', '')) }}" alt="{{ product.name }}" id="main-product-image">
+                    </div>
+                    <div class="product-thumbnails">
+                        <div class="thumbnail active" data-src="{{ url_for('static', filename=product.image.replace('static/', '')) }}">
+                            <img src="{{ url_for('static', filename=product.image.replace('static/', '')) }}" alt="{{ product.name }}">
+                        </div>
+                        <!-- Demo thumbnails - would be dynamic in real implementation -->
+                        <div class="thumbnail" data-src="{{ url_for('static', filename='images/products/detail-2.jpg') }}">
+                            <img src="{{ url_for('static', filename='images/products/detail-2.jpg') }}" alt="{{ product.name }} - Detail 2">
+                        </div>
+                        <div class="thumbnail" data-src="{{ url_for('static', filename='images/products/detail-3.jpg') }}">
+                            <img src="{{ url_for('static', filename='images/products/detail-3.jpg') }}" alt="{{ product.name }} - Detail 3">
+                        </div>
+                        <div class="thumbnail" data-src="{{ url_for('static', filename='images/products/detail-4.jpg') }}">
+                            <img src="{{ url_for('static', filename='images/products/detail-4.jpg') }}" alt="{{ product.name }} - Detail 4">
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Product Tabs -->
+            <div class="product-tabs">
+                <div class="tabs-navigation">
+                    <button class="tab-btn active" data-tab="description">Description</button>
+                    <button class="tab-btn" data-tab="information">Additional Information</button>
+                    <button class="tab-btn" data-tab="reviews">Reviews ({{ (product.rating * 10)|int }})</button>
+                    <button class="tab-btn" data-tab="shipping">Shipping & Returns</button>
+                </div>
+                <div class="tabs-content">
+                    <div class="tab-pane active" id="description">
+                        <div class="tab-content-inner">
+                            <h3>Product Description</h3>
+                            <p>{{ product.description }}</p>
+                            <p>Our {{ product.name }} is crafted using the finest {{ product.category }} yarns, handpicked for their exceptional quality and texture. Each saree undergoes a meticulous process of handweaving by skilled artisans who have inherited this craft through generations.</p>
+                            <p>The {{ product.color }} hue is achieved using natural dyes, ensuring both vibrant color retention and eco-friendly production. The intricate patterns and motifs are inspired by traditional Indian art forms, showcasing the rich cultural heritage of Indian textiles.</p>
+                            <div class="description-features">
+                                <div class="feature">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-pencil-ruler"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Length & Width</h4>
+                                        <p>5.5 meters in length and 1.1 meters in width, with included blouse piece of 0.8 meters</p>
+                                    </div>
+                                </div>
+                                <div class="feature">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-tint"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Material & Care</h4>
+                                        <p>100% {{ product.category|title }} | Dry clean recommended for first wash, gentle hand wash thereafter</p>
+                                    </div>
+                                </div>
+                                <div class="feature">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-gem"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Craftsmanship</h4>
+                                        <p>Handcrafted by master weavers in traditional looms</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="information">
+                        <div class="tab-content-inner">
+                            <h3>Additional Information</h3>
+                            <table class="info-table">
+                                <tr>
+                                    <th>Weight</th>
+                                    <td>450-500 grams</td>
+                                </tr>
+                                <tr>
+                                    <th>Dimensions</th>
+                                    <td>5.5 meters (length) × 1.1 meters (width)</td>
+                                </tr>
+                                <tr>
+                                    <th>Material</th>
+                                    <td>{{ product.category|title }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Color</th>
+                                    <td>{{ product.color|title }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Occasion</th>
+                                    <td>{% if product.category == 'silk' %}Wedding, Festival, Formal{% elif product.category == 'cotton' %}Casual, Daily Wear, Office{% else %}Semi-Formal, Festive, Casual{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <th>Blouse Piece</th>
+                                    <td>Included (0.8 meters)</td>
+                                </tr>
+                                <tr>
+                                    <th>Care Instructions</th>
+                                    <td>Dry clean recommended for first wash. For subsequent washes, gentle hand wash with mild detergent in cold water. Avoid soaking for long periods. Iron on medium heat.</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="reviews">
+                        <div class="tab-content-inner">
+                            <h3>Customer Reviews</h3>
+                            <div class="reviews-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">{{ product.rating }}</div>
+                                    <div class="rating-stars">
+                                        {% for i in range(1, 6) %}
+                                            {% if i <= product.rating|int %}
+                                                <i class="fas fa-star"></i>
+                                            {% elif i <= product.rating + 0.5 %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="total-reviews">Based on {{ (product.rating * 10)|int }} reviews</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">5 stars</div>
+                                        <div class="bar-container">
+                                            <div class="bar" style="width: 75%;"></div>
+                                        </div>
+                                        <div class="rating-count">{{ (product.rating * 7.5)|int }}</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">4 stars</div>
+                                        <div class="bar-container">
+                                            <div class="bar" style="width: 20%;"></div>
+                                        </div>
+                                        <div class="rating-count">{{ (product.rating * 2)|int }}</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">3 stars</div>
+                                        <div class="bar-container">
+                                            <div class="bar" style="width: 5%;"></div>
+                                        </div>
+                                        <div class="rating-count">{{ (product.rating * 0.5)|int }}</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">2 stars</div>
+                                        <div class="bar-container">
+                                            <div class="bar" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="rating-count">0</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">1 star</div>
+                                        <div class="bar-container">
+                                            <div class="bar" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="rating-count">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reviews-list">
+                                <div class="review-item">
+                                    <div class="reviewer-avatar">
+                                        <img src="{{ url_for('static', filename='images/users/user-1.jpg') }}" alt="Reviewer">
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="reviewer-name">Meera Patel</div>
+                                        <div class="review-date">3 weeks ago</div>
+                                        <div class="reviewer-rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                        <h4 class="review-title">Absolutely stunning!</h4>
+                                        <p class="review-text">This saree exceeded my expectations. The color is vibrant and the craftsmanship is exceptional. I received so many compliments when I wore it to my cousin's wedding. The fabric is comfortable even for extended wear. Highly recommend!</p>
+                                    </div>
+                                </div>
+                                <div class="review-item">
+                                    <div class="reviewer-avatar">
+                                        <img src="{{ url_for('static', filename='images/users/user-2.jpg') }}" alt="Reviewer">
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="reviewer-name">Anjali Singh</div>
+                                        <div class="review-date">1 month ago</div>
+                                        <div class="reviewer-rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <h4 class="review-title">Beautiful saree, fast delivery</h4>
+                                        <p class="review-text">The texture and feel of this saree is premium. The color is slightly different from what appears online, but still beautiful. The delivery was prompt and packaging was excellent. Would shop again!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-form-container">
+                                <h3>Write a Review</h3>
+                                <form class="review-form">
+                                    <div class="form-group">
+                                        <label>Your Rating</label>
+                                        <div class="rating-selector">
+                                            <i class="far fa-star" data-rating="1"></i>
+                                            <i class="far fa-star" data-rating="2"></i>
+                                            <i class="far fa-star" data-rating="3"></i>
+                                            <i class="far fa-star" data-rating="4"></i>
+                                            <i class="far fa-star" data-rating="5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review-title">Review Title</label>
+                                        <input type="text" id="review-title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review-content">Your Review</label>
+                                        <textarea id="review-content" rows="5" required></textarea>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group half">
+                                            <label for="reviewer-name">Your Name</label>
+                                            <input type="text" id="reviewer-name" required>
+                                        </div>
+                                        <div class="form-group half">
+                                            <label for="reviewer-email">Your Email</label>
+                                            <input type="email" id="reviewer-email" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="shipping">
+                        <div class="tab-content-inner">
+                            <h3>Shipping & Returns</h3>
+                            <div class="shipping-content">
+                                <div class="shipping-section">
+                                    <h4>Shipping Policy</h4>
+                                    <ul>
+                                        <li>Free shipping on all orders above ₹1999 within India</li>
+                                        <li>Standard shipping (3-5 business days): ₹149</li>
+                                        <li>Express shipping (1-2 business days): ₹299</li>
+                                        <li>International shipping available to select countries</li>
+                                        <li>Orders are processed within 24 hours on business days</li>
+                                    </ul>
+                                </div>
+                                <div class="shipping-section">
+                                    <h4>Return Policy</h4>
+                                    <ul>
+                                        <li>Easy 30-day returns for unworn items in original condition</li>
+                                        <li>Return shipping fee of ₹199 applies unless item is defective</li>
+                                        <li>Exchanges are free of charge</li>
+                                        <li>Custom or made-to-order items cannot be returned</li>
+                                        <li>Refunds are processed within 7-10 business days after receiving the returned item</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="shipping-tracker">
+                                <h4>Track Your Order</h4>
+                                <form class="tracking-form">
+                                    <input type="text" placeholder="Enter your order number" required>
+                                    <button type="submit" class="btn btn-secondary">Track Order</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <div class="related-products">
+                <div class="section-title">
+                    <h2>You May Also Like</h2>
+                    <span class="title-decor"></span>
+                </div>
+                <div class="product-grid columns-4">
+                    {% for product in related_products %}
+                    <div class="product-card">
+                        <div class="product-img">
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                <img src="{{ url_for('static', filename=product.image.replace('static/', '')) }}" alt="{{ product.name }}">
+                            </a>
+                            <div class="product-actions">
+                                <form action="{{ url_for('add_to_cart') }}" method="post" class="add-to-cart-form">
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="action-btn add-to-cart-btn" title="Add to Cart">
+                                        <i class="fas fa-shopping-bag"></i>
+                                    </button>
+                                </form>
+                                <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="action-btn view-btn" title="Quick View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                            </h3>
+                            <div class="product-price">₹{{ product.price }}</div>
+                            <div class="product-rating">
+                                {% for i in range(1, 6) %}
+                                    {% if i <= product.rating|int %}
+                                        <i class="fas fa-star"></i>
+                                    {% elif i <= product.rating + 0.5 %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+    <!-- Product Info -->
+                <div class="product-info">
+                    <div class="product-badges">
+                        {% if product.price > 10000 %}
+                        <span class="badge premium">Premium</span>
+                        {% endif %}
+                        <span class="badge in-stock">In Stock</span>
+                    </div>
+                    <h1 class="product-title">{{ product.name }}</h1>
+                    <div class="product-rating-detail">
+                        <div class="stars">
+                            {% for i in range(1, 6) %}
+                                {% if i <= product.rating|int %}
+                                    <i class="fas fa-star"></i>
+                                {% elif i <= product.rating + 0.5 %}
+                                    <i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <span class="rating-count">{{ (product.rating * 10)|int }} Reviews</span>
+                    </div>
+                    <div class="product-price-detail">
+                        <span class="current-price">₹{{ product.price }}</span>
+                        {% if product.price > 7000 %}
+                        <span class="old-price">₹{{ (product.price * 1.2)|int }}</span>
+                        <span class="discount">-20%</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-description">
+                        <p>{{ product.description }}</p>
+                        <ul class="product-features">
+                            <li><i class="fas fa-check"></i> Handcrafted by skilled artisans</li>
+                            <li><i class="fas fa-check"></i> Premium {{ product.category }} fabric</li>
+                            <li><i class="fas fa-check"></i> Traditional {{ product.color }} color with intricate detailing</li>
+                            <li><i class="fas fa-check"></i> Blouse piece included</li>
+                            <li><i class="fas fa-check"></i> Free shipping across India</li>
+                        </ul>
+                    </div>
+                    <div class="product-options">
+                        <div class="color-option">
+                            <h4>Color: <span>{{ product.color|title }}</span></h4>
+                            <div class="color-swatches">
+                                <a href="#" class="color-swatch {{ product.color }} active"></a>
+                                <!-- Additional color options would be dynamic in real implementation -->
+                                <a href="#" class="color-swatch green"></a>
+                                <a href="#" class="color-swatch blue"></a>
+                                <a href="#" class="color-swatch purple"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-actions-detail">
+                        <form action="{{ url_for('add_to_cart') }}" method="post" class="add-to-cart-form">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <div class="quantity-selector">
+                                <button type="button" class="qty-btn minus-btn">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" name="quantity" value="1" min="1" max="10" class="qty-input">
+                                <button type="button" class="qty-btn plus-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-add-to-cart">
+                                <i class="fas fa-shopping-bag"></i> Add to Cart
+                            </button>
+                            <button type="button" class="btn btn-outline wishlist-btn">
+                                <i class="far fa-heart"></i> Wishlist
+                            </button>
+                        </form>
+                    </div>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Category:</span>
+                            <a href="{{ url_for('shop', category=product.category) }}">{{ product.category|title }} Sarees</a>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Tags:</span>
+                            <a href="#">{{ product.color }}</a>,
+                            <a href="#">{{ product.category }}</a>,
+                            <a href="#">traditional</a>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Share:</span>
+                            <div class="social-share">
+                                <a href="#" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" title="Share on Pinterest"><i class="fab fa-pinterest"></i></a>
+                                <a href="#" title="Share on Instagram"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shipping-info">
+                        <div class="shipping-item">
+                            <div class="icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="content">
+                                <h4>Free Shipping</h4>
+                                <p>On all orders above ₹1999</p>
+                            </div>
+                        </div>
+                        <div class="shipping-item">
+                            <div class="icon">
+                                <i class="fas fa-undo"></i>
+                            </div>
+                            <div class="content">
+                                <h4>Easy Returns</h4>
+                                <p>30-day return policy</p>
+                            </div>
+                        </div>
+                        <div class="shipping-item">
+                            <div class="icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="content">
+                                <h4>Secure Payment</h4>
+                                <p>100% secure checkout</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

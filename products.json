@@ -1,0 +1,106 @@
+{
+    "featured": [
+        {
+            "id": 1,
+            "name": "Banarasi Silk Saree",
+            "price": 8999,
+            "image": "static/images/products/banarasi-silk.jpg",
+            "description": "Handcrafted Banarasi silk saree with intricate gold zari work",
+            "category": "silk",
+            "color": "red",
+            "rating": 4.8
+        },
+        {
+            "id": 2,
+            "name": "Kanjivaram Silk Saree",
+            "price": 12999,
+            "image": "static/images/products/kanjivaram.jpg",
+            "description": "Traditional Kanjivaram silk saree with temple border",
+            "category": "silk",
+            "color": "purple",
+            "rating": 4.9
+        },
+        {
+            "id": 3,
+            "name": "Cotton Handloom Saree",
+            "price": 2999,
+            "image": "static/images/products/cotton-handloom.jpg",
+            "description": "Lightweight cotton handloom saree with contemporary block prints",
+            "category": "cotton",
+            "color": "blue",
+            "rating": 4.5
+        },
+        {
+            "id": 4,
+            "name": "Chanderi Silk Saree",
+            "price": 4999,
+            "image": "static/images/products/chanderi.jpg",
+            "description": "Elegant Chanderi silk saree with golden border",
+            "category": "silk",
+            "color": "green",
+            "rating": 4.7
+        }
+    ],
+    "all": [
+        {
+            "id": 1,
+            "name": "Banarasi Silk Saree",
+            "price": 8999,
+            "image": "static/images/products/banarasi-silk.jpg",
+            "description": "Handcrafted Banarasi silk saree with intricate gold zari work",
+            "category": "silk",
+            "color": "red",
+            "rating": 4.8
+        },
+        {
+            "id": 2,
+            "name": "Kanjivaram Silk Saree",
+            "price": 12999,
+            "image": "static/images/products/kanjivaram.jpg",
+            "description": "Traditional Kanjivaram silk saree with temple border",
+            "category": "silk",
+            "color": "purple",
+            "rating": 4.9
+        },
+        {
+            "id": 3,
+            "name": "Cotton Handloom Saree",
+            "price": 2999,
+            "image": "static/images/products/cotton-handloom.jpg",
+            "description": "Lightweight cotton handloom saree with contemporary block prints",
+            "category": "cotton",
+            "color": "blue",
+            "rating": 4.5
+        },
+        {
+            "id": 4,
+            "name": "Chanderi Silk Saree",
+            "price": 4999,
+            "image": "static/images/products/chanderi.jpg",
+            "description": "Elegant Chanderi silk saree with golden border",
+            "category": "silk",
+            "color": "green",
+            "rating": 4.7
+        },
+        {
+            "id": 5,
+            "name": "Tussar Silk Saree",
+            "price": 5999,
+            "image": "static/images/products/tussar.jpg",
+            "description": "Natural Tussar silk saree with hand-painted Madhubani art",
+            "category": "silk",
+            "color": "beige",
+            "rating": 4.6
+        },
+        {
+            "id": 6,
+            "name": "Linen Saree",
+            "price": 3999,
+            "image": "static/images/products/linen.jpg",
+            "description": "Premium linen saree with silver zari border",
+            "category": "linen",
+            "color": "grey",
+            "rating": 4.4
+        }
+    ]
+}

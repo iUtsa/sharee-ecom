@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Shop Sarees - Sharee{% endblock %}
+
+{% block content %}
+    <!-- Shop Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="banner-title">Shop Sarees</h1>
+                <nav class="breadcrumb">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <span class="separator">/</span>
+                    <span class="current">Shop</span>
+                    {% if category %}
+                    <span class="separator">/</span>
+                    <span class="current">{{ category|title }} Sarees</span>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Content -->
+    <section class="shop-content section-padding">
+        <div class="container">
+            <div class="shop-grid">
+                <!-- Sidebar -->
+                <div class="shop-sidebar">
+                    <div class="sidebar-widget categories-widget">
+                        <h3 class="widget-title">Categories</h3>
+                        <ul class="category-list">
+                            <li><a href="{{ url_for('shop') }}" class="{% if not category %}active{% endif %}">All Sarees</a></li>
+                            <li><a href="{{ url_for('shop', category='silk') }}" class="{% if category == 'silk' %}active{% endif %}">Silk Sarees</a></li>
+                            <li><a href="{{ url_for('shop', category='cotton') }}" class="{% if category == 'cotton' %}active{% endif %}">Cotton Sarees</a></li>
+                            <li><a href="{{ url_for('shop', category='linen') }}" class="{% if category == 'linen' %}active{% endif %}">Linen Sarees</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-widget filter-widget">
+                        <h3 class="widget-title">Filter by Color</h3>
+                        <div class="color-filter">
+                            <a href="{{ url_for('shop', category=category, color='red') }}" class="color-swatch red {% if color == 'red' %}active{% endif %}"></a>
+                            <a href="{{ url_for('shop', category=category, color='blue') }}" class="color-swatch blue {% if color == 'blue' %}active{% endif %}"></a>
+                            <a href="{{ url_for('shop', category=category, color='green') }}" class="color-swatch green {% if color == 'green' %}active{% endif %}"></a>
+                            <a href="{{ url_for('shop', category=category, color='purple') }}" class="color-swatch purple {% if color == 'purple' %}active{% endif %}"></a>
+                            <a href="{{ url_for('shop', category=category, color='beige') }}" class="color-swatch beige {% if color == 'beige' %}active{% endif %}"></a>
+                            <a href="{{ url_for('shop', category=category, color='grey') }}" class="color-swatch grey {% if color == 'grey' %}active{% endif %}"></a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget price-widget">
+                        <h3 class="widget-title">Price Range</h3>
+                        <form class="price-filter-form">
+                            <div class="price-range">
+                                <input type="range" min="1000" max="15000" value="10000" class="price-slider" id="price-slider">
+                                <div class="price-range-values">
+                                    <span>₹1,000</span>
+                                    <span id="price-value">₹10,000</span>
+                                    <span>₹15,000</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary btn-sm">Apply</button>
+                        </form>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">New Arrivals</h3>
+                        <div class="mini-product-list">
+                            <div class="mini-product">
+                                <div class="mini-product-img">
+                                    <a href="#">
+                                        <img src="{{ url_for('static', filename='images/products/mini-1.jpg') }}" alt="New Arrival">
+                                    </a>
+                                </div>
+                                <div class="mini-product-info">
+                                    <h4><a href="#">Patola Silk Saree</a></h4>
+                                    <div class="mini-product-price">₹6,999</div>
+                                    <div class="mini-product-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mini-product">
+                                <div class="mini-product-img">
+                                    <a href="#">
+                                        <img src="{{ url_for('static', filename='images/products/mini-2.jpg') }}" alt="New Arrival">
+                                    </a>
+                                </div>
+                                <div class="mini-product-info">
+                                    <h4><a href="#">Gadwal Silk Saree</a></h4>
+                                    <div class="mini-product-price">₹5,499</div>
+                                    <div class="mini-product-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="shop-main">
+                    <div class="shop-toolbar">
+                        <div class="product-count">
+                            Showing <span>{{ products|length }}</span> products
+                        </div>
+                        <div class="sort-options">
+                            <form>
+                                <select name="sort" onchange="this.form.submit()">
+                                    <option value="" {% if not sort %}selected{% endif %}>Default Sorting</option>
+                                    <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="rating" {% if sort == 'rating' %}selected{% endif %}>By Rating</option>
+                                </select>
+                                <!-- Preserve other query parameters -->
+                                {% if category %}
+                                <input type="hidden" name="category" value="{{ category }}">
+                                {% endif %}
+                                {% if color %}
+                                <input type="hidden" name="color" value="{{ color }}">
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+
+                    {% if products %}
+                    <div class="product-grid">
+                        {% for product in products %}
+                        <div class="product-card">
+                            <div class="product-badge">
+                                {% if loop.index == 1 and not category and not color %}
+                                <span class="badge-new">New</span>
+                                {% elif product.price > 10000 %}
+                                <span class="badge-premium">Premium</span>
+                                {% endif %}
+                            </div>
+                            <div class="product-img">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                    <img src="{{ url_for('static', filename=product.image.replace('static/', '')) }}" alt="{{ product.name }}">
+                                </a>
+                                <div class="product-actions">
+                                    <form action="{{ url_for('add_to_cart') }}" method="post" class="add-to-cart-form">
+                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="action-btn add-to-cart-btn" title="Add to Cart">
+                                            <i class="fas fa-shopping-bag"></i>
+                                        </button>
+                                    </form>
+                                    <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="action-btn view-btn" title="Quick View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                                </h3>
+                                <div class="product-price">₹{{ product.price }}</div>
+                                <div class="product-rating">
+                                    {% for i in range(1, 6) %}
+                                        {% if i <= product.rating|int %}
+                                            <i class="fas fa-star"></i>
+                                        {% elif i <= product.rating + 0.5 %}
+                                            <i class="fas fa-star-half-alt"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="rating-count">({{ (product.rating * 10)|int }})</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-products">
+                        <div class="no-products-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>No Products Found</h3>
+                        <p>We couldn't find any products matching your selection.</p>
+                        <a href="{{ url_for('shop') }}" class="btn btn-primary">Clear Filters</a>
+                    </div>
+                    {% endif %}
+
+                    <!-- Pagination (static for demo) -->
+                    {% if products|length > 0 %}
+                    <div class="pagination">
+                        <ul>
+                            <li class="disabled"><a href="#"><i class="fas fa-angle-left"></i></a></li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#"><i class="fas fa-angle-right"></i></a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Price slider functionality
+        const priceSlider = document.getElementById('price-slider');
+        const priceValue = document.getElementById('price-value');
+        
+        if (priceSlider && priceValue) {
+            priceSlider.addEventListener('input', function() {
+                priceValue.textContent = '₹' + parseInt(this.value).toLocaleString();
+            });
+        }
+    });
+</script>
+{% endblock %}

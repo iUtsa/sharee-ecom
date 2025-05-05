@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Sharee - Exquisite Indian Sarees{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/hero-1.jpg') }}');">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Handcrafted Treasures from India</h1>
+                        <p class="hero-text">Discover the artistry of traditional silk sarees with contemporary designs</p>
+                        <a href="{{ url_for('shop') }}" class="btn btn-primary">Shop Collection</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h2>Explore Our Collections</h2>
+                <span class="title-decor"></span>
+            </div>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="{{ url_for('static', filename='images/categories/silk.jpg') }}" alt="Silk Sarees">
+                    </div>
+                    <div class="category-content">
+                        <h3>Silk Sarees</h3>
+                        <p>Timeless elegance for special occasions</p>
+                        <a href="{{ url_for('shop', category='silk') }}" class="btn-outline">View Collection</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="{{ url_for('static', filename='images/categories/cotton.jpg') }}" alt="Cotton Sarees">
+                    </div>
+                    <div class="category-content">
+                        <h3>Cotton Sarees</h3>
+                        <p>Breathable comfort with artistic designs</p>
+                        <a href="{{ url_for('shop', category='cotton') }}" class="btn-outline">View Collection</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="{{ url_for('static', filename='images/categories/linen.jpg') }}" alt="Linen Sarees">
+                    </div>
+                    <div class="category-content">
+                        <h3>Linen Sarees</h3>
+                        <p>Contemporary style with natural texture</p>
+                        <a href="{{ url_for('shop', category='linen') }}" class="btn-outline">View Collection</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Sarees</h2>
+                <span class="title-decor"></span>
+            </div>
+            <div class="product-grid">
+                {% for product in featured_products %}
+                <div class="product-card">
+                    <div class="product-badge">
+                        {% if loop.index == 1 %}
+                        <span class="badge-new">New</span>
+                        {% elif loop.index == 2 %}
+                        <span class="badge-sale">Sale</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-img">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                            <img src="{{ url_for('static', filename=product.image.replace('static/', '')) }}" alt="{{ product.name }}">
+                        </a>
+                        <div class="product-actions">
+                            <form action="{{ url_for('add_to_cart') }}" method="post" class="add-to-cart-form">
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="action-btn add-to-cart-btn" title="Add to Cart">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </button>
+                            </form>
+                            <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="action-btn view-btn" title="Quick View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                        </h3>
+                        <div class="product-price">₹{{ product.price }}</div>
+                        <div class="product-rating">
+                            {% for i in range(1, 6) %}
+                                {% if i <= product.rating|int %}
+                                    <i class="fas fa-star"></i>
+                                {% elif i <= product.rating + 0.5 %}
+                                    <i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="rating-count">({{ (product.rating * 10)|int }})</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="view-all-container">
+                <a href="{{ url_for('shop') }}" class="btn btn-secondary">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Handloom Craft Section -->
+    <section class="craft-section section-padding">
+        <div class="container">
+            <div class="craft-content">
+                <div class="craft-text">
+                    <div class="section-title text-left">
+                        <h2>The Art of Handloom</h2>
+                        <span class="title-decor"></span>
+                    </div>
+                    <p>Each saree at Sharee is a testament to the rich heritage of Indian textile craftsmanship. Our artisans use traditional techniques passed down through generations, creating pieces that are not just garments, but works of art.</p>
+                    <p>From the intricate zari work of Banarasi silks to the vibrant block prints of cotton sarees, every detail is meticulously crafted by hand.</p>
+                    <a href="#" class="btn btn-primary">Discover Our Craft</a>
+                </div>
+                <div class="craft-image">
+                    <img src="{{ url_for('static', filename='images/handloom-craft.jpg') }}" alt="Handloom Craft">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Customers Say</h2>
+                <span class="title-decor"></span>
+            </div>
+            <div class="testimonial-slider">
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>The Banarasi silk saree I purchased from Sharee exceeded my expectations. The craftsmanship is impeccable, and the colors are even more vibrant in person. I received countless compliments at my sister's wedding.</p>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="{{ url_for('static', filename='images/testimonials/user-1.jpg') }}" alt="Priya Sharma">
+                            </div>
+                            <div class="author-info">
+                                <h4>Priya Sharma</h4>
+                                <p>Mumbai</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Feed Section -->
+    <section class="instagram-feed section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h2>Follow Us on Instagram</h2>
+                <span class="title-decor"></span>
+                <p class="subtitle">@ShareeOfficial</p>
+            </div>
+            <div class="instagram-grid">
+                <a href="#" class="instagram-item">
+                    <img src="{{ url_for('static', filename='images/instagram/insta-1.jpg') }}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </a>
+                <a href="#" class="instagram-item">
+                    <img src="{{ url_for('static', filename='images/instagram/insta-2.jpg') }}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </a>
+                <a href="#" class="instagram-item">
+                    <img src="{{ url_for('static', filename='images/instagram/insta-3.jpg') }}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </a>
+                <a href="#" class="instagram-item">
+                    <img src="{{ url_for('static', filename='images/instagram/insta-4.jpg') }}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </a>
+                <a href="#" class="instagram-item">
+                    <img src="{{ url_for('static', filename='images/instagram/insta-5.jpg') }}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </a>
+                <a href="#" class="instagram-item">
+                    <img src="{{ url_for('static', filename='images/instagram/insta-6.jpg') }}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-banner">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h2>Subscribe to Our Newsletter</h2>
+                    <p>Be the first to know about new collections, exclusive offers, and styling tips.</p>
+                </div>
+                <form class="newsletter-form-inline">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

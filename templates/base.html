@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sharee - Exquisite Indian Sarees{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="site-wrapper">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-top-content">
+                        <div class="header-contact">
+                            <a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 9876 543 210</a>
+                            <a href="mailto:hello@sharee.com"><i class="fas fa-envelope"></i> hello@sharee.com</a>
+                        </div>
+                        <div class="header-actions">
+                            {% if 'user_name' in session %}
+                                <span class="welcome-text">Welcome, {{ session['user_name'] }}!</span>
+                                {% if session['user_role'] == 'admin' %}
+                                    <a href="{{ url_for('admin_dashboard') }}" class="header-link"><i class="fas fa-gauge-high"></i> Admin</a>
+                                {% endif %}
+                                <a href="{{ url_for('logout') }}" class="header-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            {% else %}
+                                <a href="{{ url_for('login') }}" class="header-link"><i class="fas fa-user"></i> Login</a>
+                                <a href="{{ url_for('register') }}" class="header-link"><i class="fas fa-user-plus"></i> Register</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-main">
+                <div class="container">
+                    <div class="header-main-content">
+                        <div class="logo">
+                            <a href="{{ url_for('home') }}">
+                                <span class="logo-text">Sharee</span>
+                                <span class="logo-tagline">Tradition Reimagined</span>
+                            </a>
+                        </div>
+                        <div class="search-box">
+                            <form action="{{ url_for('shop') }}" method="get">
+                                <input type="text" name="search" placeholder="Search for sarees..." required>
+                                <button type="submit"><i class="fas fa-search"></i></button>
+                            </form>
+                        </div>
+                        <nav class="nav-icons">
+                            <a href="{{ url_for('cart') }}" class="cart-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                                {% if 'cart' in session and session['cart'] %}
+                                    <span class="cart-count">{{ session['cart']|sum(attribute='quantity') }}</span>
+                                {% endif %}
+                            </a>
+                            <a href="#" class="wishlist-icon">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="header-nav">
+                <div class="container">
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="{{ url_for('home') }}">Home</a></li>
+                            <li><a href="{{ url_for('shop') }}">Shop All</a></li>
+                            <li><a href="{{ url_for('shop', category='silk') }}">Silk Sarees</a></li>
+                            <li><a href="{{ url_for('shop', category='cotton') }}">Cotton Sarees</a></li>
+                            <li><a href="{{ url_for('shop', category='linen') }}">Linen Sarees</a></li>
+                            <li><a href="#">Collections</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    <div class="container">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                                <button class="close-btn"><i class="fas fa-times"></i></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Footer Section -->
+        <footer class="footer">
+            <div class="footer-top">
+                <div class="container">
+                    <div class="footer-columns">
+                        <div class="footer-column">
+                            <h3 class="footer-title">About Sharee</h3>
+                            <p>Sharee brings you the finest handcrafted sarees from across India. Each piece tells a story of artistry and tradition woven into luxurious fabrics.</p>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-pinterest"></i></a>
+                            </div>
+                        </div>
+                        <div class="footer-column">
+                            <h3 class="footer-title">Customer Service</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Shipping & Returns</a></li>
+                                <li><a href="#">Track Order</a></li>
+                                <li><a href="#">Size Guide</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-column">
+                            <h3 class="footer-title">Information</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Our Artisans</a></li>
+                                <li><a href="#">Sustainability</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Terms & Conditions</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-column">
+                            <h3 class="footer-title">Newsletter</h3>
+                            <p>Subscribe to receive updates, access to exclusive deals, and more.</p>
+                            <form class="newsletter-form">
+                                <input type="email" placeholder="Enter your email address" required>
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="footer-bottom-content">
+                        <p>© 2025 Sharee. All rights reserved.</p>
+                        <div class="payment-methods">
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-amex"></i>
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

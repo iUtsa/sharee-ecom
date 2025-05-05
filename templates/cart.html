@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - Sharee{% endblock %}
+
+{% block content %}
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="banner-title">Shopping Cart</h1>
+                <nav class="breadcrumb">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <span class="separator">/</span>
+                    <span class="current">Cart</span>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Content -->
+    <section class="cart-section section-padding">
+        <div class="container">
+            {% if cart_products %}
+            <div class="cart-content">
+                <div class="cart-table-container">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th class="product-remove"></th>
+                                <th class="product-thumbnail"></th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-subtotal">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_products %}
+                            <tr>
+                                <td class="product-remove">
+                                    <form action="{{ url_for('update_cart') }}" method="post">
+                                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                                        <input type="hidden" name="quantity" value="0">
+                                        <button type="submit" class="remove-btn">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td class="product-thumbnail">
+                                    <a href="{{ url_for('product_detail', product_id=item.product.id) }}">
+                                        <img src="{{ url_for('static', filename=item.product.image.replace('static/', '')) }}" alt="{{ item.product.name }}">
+                                    </a>
+                                </td>
+                                <td class="product-name">
+                                    <a href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a>
+                                    <div class="product-meta">
+                                        <span class="variation">Color: {{ item.product.color|title }}</span>
+                                    </div>
+                                </td>
+                                <td class="product-price">
+                                    <span>₹{{ item.product.price }}</span>
+                                </td>
+                                <td class="product-quantity">
+                                    <form action="{{ url_for('update_cart') }}" method="post" class="update-cart-form">
+                                        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                                        <div class="quantity-selector">
+                                            <button type="button" class="qty-btn minus-btn">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" class="qty-input">
+                                            <button type="button" class="qty-btn plus-btn">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <button type="submit" class="update-btn">Update</button>
+                                    </form>
+                                </td>
+                                <td class="product-subtotal">
+                                    <span>₹{{ item.total }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-actions">
+                    <div class="coupon">
+                        <input type="text" placeholder="Coupon code">
+                        <button class="btn btn-secondary">Apply Coupon</button>
+                    </div>
+                    <a href="{{ url_for('shop') }}" class="btn btn-outline">Continue Shopping</a>
+                </div>
+            </div>
+            <div class="cart-sidebar">
+                <div class="cart-totals">
+                    <h3>Cart Totals</h3>
+                    <table class="totals-table">
+                        <tbody>
+                            <tr class="subtotal">
+                                <th>Subtotal</th>
+                                <td>₹{{ total }}</td>
+                            </tr>
+                            <tr class="shipping">
+                                <th>Shipping</th>
+                                <td>
+                                    {% if total < 1999 %}
+                                    ₹149
+                                    {% else %}
+                                    <span class="free-shipping">Free!</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr class="tax">
+                                <th>GST (18%)</th>
+                                <td>₹{{ (total * 0.18)|int }}</td>
+                            </tr>
+                            <tr class="total">
+                                <th>Total</th>
+                                <td>
+                                    {% if total < 1999 %}
+                                    ₹{{ total + (total * 0.18)|int + 149 }}
+                                    {% else %}
+                                    ₹{{ total + (total * 0.18)|int }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-block">Proceed to Checkout</a>
+                </div>
+                <div class="shipping-calculator">
+                    <h3>Shipping Calculator</h3>
+                    <form class="shipping-form">
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <select id="country">
+                                <option value="IN" selected>India</option>
+                                <option value="US">United States</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="CA">Canada</option>
+                                <option value="AU">Australia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select id="state">
+                                <option value="">Select State</option>
+                                <option value="AP">Andhra Pradesh</option>
+                                <option value="AR">Arunachal Pradesh</option>
+                                <option value="AS">Assam</option>
+                                <option value="BR">Bihar</option>
+                                <option value="CT">Chhattisgarh</option>
+                                <option value="GA">Goa</option>
+                                <option value="GJ">Gujarat</option>
+                                <option value="HR">Haryana</option>
+                                <option value="HP">Himachal Pradesh</option>
+                                <option value="JH">Jharkhand</option>
+                                <option value="KA">Karnataka</option>
+                                <option value="KL">Kerala</option>
+                                <option value="MP">Madhya Pradesh</option>
+                                <option value="MH">Maharashtra</option>
+                                <option value="MN">Manipur</option>
+                                <option value="ML">Meghalaya</option>
+                                <option value="MZ">Mizoram</option>
+                                <option value="NL">Nagaland</option>
+                                <option value="OR">Odisha</option>
+                                <option value="PB">Punjab</option>
+                                <option value="RJ">Rajasthan</option>
+                                <option value="SK">Sikkim</option>
+                                <option value="TN">Tamil Nadu</option>
+                                <option value="TG">Telangana</option>
+                                <option value="TR">Tripura</option>
+                                <option value="UP">Uttar Pradesh</option>
+                                <option value="UK">Uttarakhand</option>
+                                <option value="WB">West Bengal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" id="pincode">
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-block">Calculate Shipping</button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h2>Your cart is empty</h2>
+                <p>Looks like you haven't added any items to your cart yet.</p>
+                <a href="{{ url_for('shop') }}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Recommended Products -->
+    <section class="recommended-products section-padding">
+        <div class="container">
+            <div class="section-title">
+                <h2>Recommended For You</h2>
+                <span class="title-decor"></span>
+            </div>
+            <div class="product-grid columns-4">
+                <!-- Recommended products would be dynamic in real implementation -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <a href="#">
+                            <img src="{{ url_for('static', filename='images/products/recommended-1.jpg') }}" alt="Recommended Product">
+                        </a>
+                                                    <div class="product-actions">
+                                <button class="action-btn add-to-cart-btn" title="Add to Cart">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </button>
+                                <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <a href="#" class="action-btn view-btn" title="Quick View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">
+                                <a href="#">Jamdani Cotton Saree</a>
+                            </h3>
+                            <div class="product-price">₹4,299</div>
+                            <div class="product-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quantity selectors
+        const minusBtns = document.querySelectorAll('.minus-btn');
+        const plusBtns = document.querySelectorAll('.plus-btn');
+        
+        minusBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.parentNode.querySelector('.qty-input');
+                let value = parseInt(input.value);
+                if (value > 1) {
+                    input.value = value - 1;
+                }
+            });
+        });
+        
+        plusBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.parentNode.querySelector('.qty-input');
+                let value = parseInt(input.value);
+                if (value < 10) {
+                    input.value = value + 1;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}">
+                            <button class="action-btn add-to-cart-btn" title="Add to Cart">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <a href="#" class="action-btn view-btn" title="Quick View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">
+                            <a href="#">Pochampally Ikat Saree</a>
+                        </h3>
+                        <div class="product-price">₹4,999</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <a href="#">
+                            <img src="{{ url_for('static', filename='images/products/recommended-2.jpg') }}" alt="Recommended Product">
+                        </a>
+                        <div class="product-actions">
+                            <button class="action-btn add-to-cart-btn" title="Add to Cart">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <a href="#" class="action-btn view-btn" title="Quick View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">
+                            <a href="#">Bomkai Cotton Saree</a>
+                        </h3>
+                        <div class="product-price">₹3,499</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <a href="#">
+                            <img src="{{ url_for('static', filename='images/products/recommended-3.jpg') }}" alt="Recommended Product">
+                        </a>
+                        <div class="product-actions">
+                            <button class="action-btn add-to-cart-btn" title="Add to Cart">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                            <button class="action-btn wishlist-btn" title="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <a href="#" class="action-btn view-btn" title="Quick View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">
+                            <a href="#">Bhagalpuri Silk Saree</a>
+                        </h3>
+                        <div class="product-price">₹5,799</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <a href="#">
+                            <img src="{{ url_for('static', filename='images/products/recommended-4.jpg') }}" alt="Recommended Product">
+                        </a>
+                        <div class="product-actions
